@@ -40,6 +40,19 @@ public class PlayerMoveScript : MonoBehaviour
      * lr < 0 : 左
      */
 
+    //ビーム用
+    public GameObject beamObj;
+    public float beamTime;
+    public float beamCoolTime;
+    bool beamShooting;
+    public Transform muzzleR;
+    public Transform muzzleL;
+    //鰭攻撃用
+    public GameObject finAttackObj;
+    public float finAttackTime;
+    public float finAttackCoolTime;
+    bool finAttacking;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,6 +61,9 @@ public class PlayerMoveScript : MonoBehaviour
         canMove = true;
         moveNum = 0;
         lr = 1;
+
+        beamShooting = false;
+        finAttacking = false;
     }
 
     // Update is called once per frame
@@ -79,7 +95,7 @@ public class PlayerMoveScript : MonoBehaviour
 
                     //ジャンプ中でなければ動作番号の変更
                     if (jumpStep == 0) { moveNum = 1; }
-                    lr = 1;     //左右変更
+                    if (!beamShooting && !finAttacking) lr = 1;     //左右変更
                 }
                 else
                 {
@@ -101,7 +117,7 @@ public class PlayerMoveScript : MonoBehaviour
 
                     //ジャンプ中でなければ動作番号の変更
                     if (jumpStep == 0) { moveNum = 1; }
-                    lr = -1;    //左右変更
+                    if (!beamShooting && !finAttacking) lr = -1;    //左右変更
                 }
                 else
                 {
@@ -163,7 +179,18 @@ public class PlayerMoveScript : MonoBehaviour
 
             //速度適応
             rb.velocity = vel;
-            
+
+
+            //ビーム
+            if (!beamShooting && Input.GetKeyDown(KeyCode.Space))
+            {
+                StartCoroutine(beamShoot());
+            }
+            //鰭攻撃
+            if (!finAttacking && Input.GetKeyDown(KeyCode.C))
+            {
+                StartCoroutine(finAttack());
+            }
         }
 
     }
@@ -171,5 +198,34 @@ public class PlayerMoveScript : MonoBehaviour
     public void setIsGround(bool b)
     {
         isGround = b;
+    }
+
+    IEnumerator beamShoot()
+    {
+        beamShooting = true;
+
+        GameObject newBeam = Instantiate(beamObj, muzzleR.position, Quaternion.identity);
+        if (lr > 0) newBeam.GetComponent<PlayerBeamScript>().playerObj = muzzleR;
+        if (lr < 0) newBeam.GetComponent<PlayerBeamScript>().playerObj = muzzleL;
+        newBeam.GetComponent<PlayerBeamScript>().beamTime = this.beamTime;
+        newBeam.GetComponent<PlayerBeamScript>().lr = lr;
+
+        yield return new WaitForSeconds(beamCoolTime);
+
+        beamShooting = false;
+    }
+
+    IEnumerator finAttack()
+    {
+        finAttacking = true;
+
+        GameObject newFin = Instantiate(finAttackObj, transform.position, Quaternion.identity);
+        newFin.GetComponent<PlayerFinAttackScript>().playerObj = this.transform;
+        newFin.GetComponent<PlayerFinAttackScript>().finAttackTime = this.finAttackTime;
+        newFin.GetComponent<PlayerFinAttackScript>().lr = lr;
+
+        yield return new WaitForSeconds(finAttackCoolTime);
+
+        finAttacking = false;
     }
 }
