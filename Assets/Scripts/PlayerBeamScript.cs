@@ -43,6 +43,10 @@ public class PlayerBeamScript : MonoBehaviour
         beamTrf.localPosition = new Vector2(0.5f * lr, 0);
         if (lr < 0) beamInSpr.flipX = true;
         if (lr < 0) beamSpr.flipX = true;
+
+        boxCollider.size = new Vector2(0, width);
+        beamInSpr.size = new Vector2(0, 0.5f);
+        beamSpr.size = new Vector2(0, 0.5f);
     }
 
     // Update is called once per frame
@@ -96,7 +100,7 @@ public class PlayerBeamScript : MonoBehaviour
 
         float beamSizeX = Mathf.Abs(lineEndPos.x - pos.x);
         beamInSpr.size = new Vector2(Mathf.Min(beamSizeX, 0.5f), 0.5f);
-        beamSpr.size = new Vector2(beamSizeX - 0.5f, 0.5f);
+        beamSpr.size = new Vector2(Mathf.Max(beamSizeX, 0.5f) - 0.5f, 0.5f);
     }
 
     private void OnTriggerStay2D(Collider2D collision)
