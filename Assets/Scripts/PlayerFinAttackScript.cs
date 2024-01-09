@@ -45,4 +45,12 @@ public class PlayerFinAttackScript : MonoBehaviour
         transform.localEulerAngles = new Vector3(0, 0, -r1 * 720 * lr);
         transform.localScale = new Vector2(lr, 1) * r2;
     }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.transform.tag == "EnemyCollider")
+        {
+            collision.gameObject.GetComponent<EnemyScript>().Damage(power * Time.deltaTime);
+        }
+    }
 }

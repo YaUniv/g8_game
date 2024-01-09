@@ -105,9 +105,9 @@ public class PlayerBeamScript : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        //if (collision.transform.tag == "Enemy")
-        //{
-        //    collision.gameObject.GetComponent<EnemyLifeScript>().damage(power * Time.deltaTime);
-        //}
+        if (collision.transform.tag == "EnemyCollider")
+        {
+            collision.gameObject.GetComponent<EnemyColliderScript>().Damage(power * Time.deltaTime);
+        }
     }
 }
