@@ -14,12 +14,16 @@ public class PlayerFinAttackScript : MonoBehaviour
 
     public int lr;      //ç∂âE
 
+    public Transform finTrf;
+
 
     // Start is called before the first frame update
     void Start()
     {
         time = 0;
-        transform.localScale = new Vector2(0, 0);
+        finTrf.localScale = new Vector2(0, 0);
+
+        AudioSource.PlayClipAtPoint(SEManager.sounds[2], Vector3.zero, SEManager.volume[2]);
     }
 
     // Update is called once per frame
@@ -28,6 +32,7 @@ public class PlayerFinAttackScript : MonoBehaviour
         if (playerObj == null)
         {
             Destroy(this.gameObject);
+            return;
         }
 
         transform.position = playerObj.position;
@@ -42,15 +47,19 @@ public class PlayerFinAttackScript : MonoBehaviour
         float r = time / finAttackTime; r = Mathf.Clamp01(r);
         float r1 = Mathf.Pow(Mathf.Sin(r * Mathf.PI/2),2);
         float r2 = Mathf.Pow(Mathf.Sin(Mathf.Clamp(r,0,0.9999f) * Mathf.PI), 0.25f);
-        transform.localEulerAngles = new Vector3(0, 0, -r1 * 720 * lr);
-        transform.localScale = new Vector2(lr, 1) * r2;
+        finTrf.localEulerAngles = new Vector3(0, 0, -r1 * 720 * lr);
+        finTrf.localScale = new Vector2(lr, 1) * r2 * 1.5f;
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.transform.tag == "EnemyCollider")
         {
-            collision.gameObject.GetComponent<EnemyScript>().Damage(power * Time.deltaTime);
+            collision.gameObject.GetComponent<EnemyColliderScript>().Damage(power * Time.deltaTime);
+        }
+        if (collision.gameObject.tag == "EnemyMissile")
+        {
+            collision.gameObject.GetComponent<MissileScript>().MissileDestroy();
         }
     }
 }

@@ -33,5 +33,11 @@ public class PlayerColliderScript : MonoBehaviour
                 playerMoveScript.PlayerDestroy();
             }
         }
+
+        if (collision.gameObject.tag == "EnemyMissile")
+        {
+            playerMoveScript.PlayerDestroy();
+            collision.gameObject.GetComponent<MissileScript>().MissileDestroy();
+        }
     }
 }

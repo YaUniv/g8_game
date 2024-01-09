@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemScript : MonoBehaviour
+public class GoalScript : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -20,10 +20,7 @@ public class ItemScript : MonoBehaviour
     {
         if (collision.transform.tag == "PlayerCollider")
         {
-            ScoreManager.instance.score += 100;
-            Destroy(this.gameObject);
-
-            AudioSource.PlayClipAtPoint(SEManager.sounds[4], Vector3.zero, SEManager.volume[4]);
+            GameManager.instance.Goal();
         }
     }
 }

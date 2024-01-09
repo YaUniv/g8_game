@@ -47,6 +47,8 @@ public class PlayerBeamScript : MonoBehaviour
         boxCollider.size = new Vector2(0, width);
         beamInSpr.size = new Vector2(0, 0.5f);
         beamSpr.size = new Vector2(0, 0.5f);
+
+        AudioSource.PlayClipAtPoint(SEManager.sounds[1], Vector3.zero, SEManager.volume[1]);
     }
 
     // Update is called once per frame
@@ -55,6 +57,7 @@ public class PlayerBeamScript : MonoBehaviour
         if (playerObj == null)
         {
             Destroy(this.gameObject);
+            return;
         }
 
         transform.position = playerObj.position;
@@ -88,7 +91,7 @@ public class PlayerBeamScript : MonoBehaviour
         {
             Debug.DrawRay(ray.origin, ray.direction * maxDistance, Color.green);
 
-            lineEndPos = pos + Vector2.right * maxDistance;
+            lineEndPos = pos + Vector2.right * maxDistance * lr;
         }
 
         //line.SetPosition(0, pos);
@@ -108,6 +111,10 @@ public class PlayerBeamScript : MonoBehaviour
         if (collision.transform.tag == "EnemyCollider")
         {
             collision.gameObject.GetComponent<EnemyColliderScript>().Damage(power * Time.deltaTime);
+        }
+        if (collision.gameObject.tag == "EnemyMissile")
+        {
+            collision.gameObject.GetComponent<MissileScript>().MissileDestroy();
         }
     }
 }

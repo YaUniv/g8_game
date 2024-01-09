@@ -12,6 +12,8 @@ public class ExplodeScrpt : MonoBehaviour
     {
         time = 0;
         sr = GetComponent<SpriteRenderer>();
+
+        AudioSource.PlayClipAtPoint(SEManager.sounds[3], Vector3.zero, SEManager.volume[3]);
     }
 
     // Update is called once per frame
