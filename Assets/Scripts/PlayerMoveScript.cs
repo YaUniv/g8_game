@@ -53,6 +53,9 @@ public class PlayerMoveScript : MonoBehaviour
     public float finAttackCoolTime;
     bool finAttacking;
 
+    //爆発
+    public GameObject ExplodeObj;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -227,5 +230,22 @@ public class PlayerMoveScript : MonoBehaviour
         yield return new WaitForSeconds(finAttackCoolTime);
 
         finAttacking = false;
+    }
+
+    public void EnemyStep()
+    {
+        jumpStep = 1;       //段階移行
+        vel.y = jumpPower;  //ジャンプ
+        jumpTime = time;    //ジャンプ開始時間
+
+        //動作番号の変更
+        moveNum = 2;
+    }
+
+    public void PlayerDestroy()
+    {
+        GameManager.instance.gameOver = true;
+        Destroy(gameObject);
+        Instantiate(ExplodeObj, transform.position, Quaternion.identity);
     }
 }
