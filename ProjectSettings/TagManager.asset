@@ -5,9 +5,6 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
-  - PlayerCollider
-  - Enemy
-  - EnemyCollider
   layers:
   - Default
   - TransparentFX
@@ -16,7 +13,7 @@ TagManager:
   - Water
   - UI
   - Ground
-  - Enemy
+  - 
   - 
   - 
   - 
@@ -47,10 +44,4 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 3289495275
-    locked: 0
-  - name: Front
-    uniqueID: 1202865337
-    locked: 0
-  - name: UI
-    uniqueID: 3439647645
     locked: 0

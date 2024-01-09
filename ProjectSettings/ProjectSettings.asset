@@ -793,10 +793,10 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: a27e00b7-1a27-491a-9ac4-a25f2b4f7aa8
+  cloudProjectId: 8efaea69-82f1-4d42-ab0c-b83bd14fda39
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: g8_game_copy 2024-01-09_16-07-52
+  projectName: g8_game
   organizationId: unity_zme4od2hg_o0mg
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0

@@ -29,11 +29,7 @@ public class CameraMoveScript : MonoBehaviour
         pos = transform.position;
         vel = rb.velocity;
 
-        if (playerTrf != null)
-        {
-            playerPos = playerTrf.position;
-        }
-        
+        playerPos = playerTrf.position;
 
         vel = playerPos - (Vector2)pos;
 
