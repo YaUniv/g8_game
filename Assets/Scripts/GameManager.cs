@@ -19,10 +19,16 @@ public class GameManager : MonoBehaviour
     float timeView;
     bool timer;
 
+    public float bossTime;
+    public float bossTimeLim;
+    float bossTimeView;
+
     float goalTime;
+    float bossClearTime;
 
     public bool maskFade;
-    float time2;
+    public float time2;
+    float time3;
 
     public TextMeshProUGUI timeText;
 
@@ -30,6 +36,17 @@ public class GameManager : MonoBehaviour
 
     public static int tryNum;
 
+    public bool bossCatFrag;
+    public bool bossCatCome;
+    public bool boss;
+    public bool bossClear;
+
+    public GameObject bossWall;
+
+    public RectTransform goalTrf;
+    public RectTransform clearTrf;
+
+    public BossMoveScript bossMoveScript;
 
     private void Awake()
     {
@@ -52,6 +69,24 @@ public class GameManager : MonoBehaviour
         MusicManager.MusicPlay(0);
 
         tryNum++;
+
+
+        float rand = Random.Range(0, 100);
+        if (rand < 33)
+        {
+            bossCatFrag = true;
+        }
+        else
+        {
+            bossCatFrag = false;
+        }
+        bossTime = 0;
+        bossTimeView = 0;
+        bossCatCome = false;
+        boss = false;
+        bossClear = false;
+
+        bossWall.SetActive(false);
     }
 
     // Update is called once per frame
@@ -59,7 +94,8 @@ public class GameManager : MonoBehaviour
     {
         if (timer)
         {
-            time += Time.deltaTime;
+            if (!gameOver)
+                time += Time.deltaTime;
 
             timeView = timeLim - time;
             timeView = Mathf.Ceil(timeView);
@@ -76,11 +112,60 @@ public class GameManager : MonoBehaviour
         if (maskFade)
         {
             time2 += Time.deltaTime;
-            if (time2 >= 4)
+            if (!bossCatFrag && time2 >= 4)
             {
                 Result();
             }
+
+            if (bossCatFrag && time2 >= 2)
+            {
+                bossCatCome = true;
+                maskFade = false;
+                goal = false;
+                time2 = 0;
+                StartCoroutine(BossCome());
+            }
         }
+
+        if (bossCatCome)
+        {
+            time2 += Time.deltaTime;
+            timeText.text = bossTimeLim.ToString("F0");
+            goalTrf.localPosition = new Vector2(goalTrf.localPosition.x, goalTrf.localPosition.y + Mathf.Max((time2-1)*0.5f, 0));
+
+            if (time2 >= 6)
+            {
+                bossCatCome = false;
+                boss = true;
+                playerMoveScript.ReMove();
+                bossWall.SetActive(true);
+                bossMoveScript.BossStart();
+            }
+        }
+
+        if (boss)
+        {
+            if (!gameOver)
+                bossTime += Time.deltaTime;
+
+            bossTimeView = bossTimeLim - bossTime;
+            bossTimeView = Mathf.Ceil(bossTimeView);
+            bossTimeView = Mathf.Max(bossTimeView, 0);
+
+            timeText.text = bossTimeView.ToString("F0");
+
+            if (!gameOver && bossTime >= bossTimeLim)
+            {
+                playerMoveScript.PlayerDestroy();
+            }
+        }
+
+        if (bossClear)
+        {
+            time3 += Time.deltaTime;
+            clearTrf.localPosition = new Vector2(clearTrf.localPosition.x, 1 + Mathf.Max((6 - time3) * 1.2f, 0));
+        }
+
 
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -113,7 +198,32 @@ public class GameManager : MonoBehaviour
         else ResultScript.allItem = false;
         if (GameObject.Find("Enemys").transform.childCount == 0) ResultScript.allEnemy = true;
         else ResultScript.allEnemy = false;
+        ResultScript.bossClear = false;
 
+    }
+
+    public void BossClear()
+    {
+        bossClear = true;
+        boss = false;
+        bossCatFrag = false;
+        bossClearTime = bossTime;
+        time3 = 0;
+        MusicManager.MusicPlay(3);
+        bossMoveScript.BossEnd();
+
+        ResultScript.bossClear = true;
+        ResultScript.bossTime = bossClearTime;
+
+        StartCoroutine(BossEnd());
+    }
+
+    private IEnumerator BossEnd()
+    {
+        yield return new WaitForSeconds(9);
+        maskFadeScript.MaskFatdeStart();
+        yield return new WaitForSeconds(4);
+        Result();
     }
 
     // コルーチン本体
@@ -139,5 +249,13 @@ public class GameManager : MonoBehaviour
     void Result()
     {
         SceneManager.LoadScene("ResultScene");
+    }
+
+    private IEnumerator BossCome()
+    {
+        yield return new WaitForSeconds(1);
+
+        MusicManager.MusicPlay(2);
+        bossMoveScript.BossCome();
     }
 }

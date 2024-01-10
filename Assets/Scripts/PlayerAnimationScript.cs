@@ -87,6 +87,8 @@ public class PlayerAnimationScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (playerMoveScript.anmStop) return;
+
         time += Time.deltaTime;
         moveNum = playerMoveScript.moveNum;
         lr = playerMoveScript.lr;

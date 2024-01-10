@@ -16,6 +16,7 @@ public class CameraMoveScript : MonoBehaviour
     public Vector2 limMin;
 
     public RawImage backImage;
+    public RawImage backImage2;
 
     // Start is called before the first frame update
     void Start()
@@ -32,6 +33,13 @@ public class CameraMoveScript : MonoBehaviour
         if (playerTrf != null)
         {
             playerPos = playerTrf.position;
+        }
+
+        if (GameManager.instance.boss || GameManager.instance.bossCatCome || GameManager.instance.bossClear)
+        {
+            transform.position = new Vector3(limMax.x, limMin.y, pos.z);
+
+            return;
         }
         
 
@@ -66,7 +74,8 @@ public class CameraMoveScript : MonoBehaviour
 
         rb.velocity = vel;
 
-        backImage.uvRect = new Rect(pos.x / 50, pos.y / 20, 1, 1);
+        backImage.uvRect = new Rect(pos.x / 47, pos.y / 20, 1, 1);
+        backImage2.uvRect = new Rect(pos.x / 47, pos.y / 20, 1, 1);
 
     }
 }

@@ -13,7 +13,10 @@ public class GoalScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (GameManager.instance.bossCatCome)
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

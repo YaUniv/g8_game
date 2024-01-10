@@ -39,5 +39,10 @@ public class PlayerColliderScript : MonoBehaviour
             playerMoveScript.PlayerDestroy();
             collision.gameObject.GetComponent<MissileScript>().MissileDestroy();
         }
+
+        if (collision.gameObject.tag == "BossHand")
+        {
+            playerMoveScript.PlayerDestroy();
+        }
     }
 }

@@ -116,5 +116,9 @@ public class PlayerBeamScript : MonoBehaviour
         {
             collision.gameObject.GetComponent<MissileScript>().MissileDestroy();
         }
+        if (collision.transform.tag == "BossHand")
+        {
+            collision.gameObject.GetComponent<BossHandScript>().Damage(power * Time.deltaTime);
+        }
     }
 }

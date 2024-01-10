@@ -13,6 +13,8 @@ public class ResultScript : MonoBehaviour
     public static int tryNum;
     public static bool allItem;
     public static bool allEnemy;
+    public static bool bossClear;
+    public static float bossTime;
 
 
     int resultStep;
@@ -29,6 +31,9 @@ public class ResultScript : MonoBehaviour
     public GameObject allItemObj;
     public GameObject allEnemyObj;
 
+    public GameObject bossObjs;
+    public TextMeshProUGUI bossTimeText;
+
     public RectTransform resultTrf;
 
     // Start is called before the first frame update
@@ -43,6 +48,11 @@ public class ResultScript : MonoBehaviour
         if (tryNum == 1) noMissObj.SetActive(true);
         if (allItem) allItemObj.SetActive(true);
         if (allEnemy) allEnemyObj.SetActive(true);
+        if (bossClear)
+        {
+            bossObjs.SetActive(true);
+            bossTimeText.text = bossTime.ToString("f2");
+        }
     }
 
     // Update is called once per frame

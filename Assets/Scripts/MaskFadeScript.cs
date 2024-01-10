@@ -14,7 +14,7 @@ public class MaskFadeScript : MonoBehaviour
     public Transform playerTrf;
 
     float maskSize;
-    float maskMaxSize = 17;
+    float maskMaxSize = 27;
     float fadeTime = 3.5f;
 
 
@@ -37,15 +37,36 @@ public class MaskFadeScript : MonoBehaviour
 
         maskTrf.position = playerTrf.position;
 
-        float r = time / fadeTime;
-        r = Mathf.Clamp01(r);
-        maskSize = Mathf.Pow(1 - r, 2) * maskMaxSize;
-        maskTrf.localScale = Vector2.one * maskSize;
+
+        if (GameManager.instance.bossCatCome)
+        {
+            float r = 2 / fadeTime - Mathf.Max(0, (time - 3)*50);
+            r = Mathf.Clamp01(r);
+            maskSize = Mathf.Pow(1 - r, 3) * maskMaxSize;
+            maskTrf.localScale = Vector2.one * maskSize;
+
+            if (r == 0)
+            {
+                start = false;
+                time = 0;
+                maskSize = maskMaxSize;
+                blackObj.SetActive(false);
+            }
+        }
+        else
+        {
+            float r = time / fadeTime;
+            r = Mathf.Clamp01(r);
+            maskSize = Mathf.Pow(1 - r, 3) * maskMaxSize;
+            maskTrf.localScale = Vector2.one * maskSize;
+        }
     }
 
     public void MaskFatdeStart()
     {
         start = true;
         blackObj.SetActive(true);
+        time = 0;
+        maskSize = maskMaxSize;
     }
 }

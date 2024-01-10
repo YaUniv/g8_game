@@ -61,6 +61,9 @@ public class PlayerMoveScript : MonoBehaviour
     //死ぬ高さ
     public float deathY = -3;
 
+    //アニメーション停止
+    public bool anmStop;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -72,6 +75,8 @@ public class PlayerMoveScript : MonoBehaviour
 
         beamShooting = false;
         finAttacking = false;
+
+        anmStop = false;
     }
 
     // Update is called once per frame
@@ -106,6 +111,29 @@ public class PlayerMoveScript : MonoBehaviour
             }
 
             return;
+        }
+
+        if (GameManager.instance.bossCatCome)
+        {
+            rb.velocity = Vector2.zero;
+
+            float time2 = GameManager.instance.time2;
+            if (time2 < 1)
+            {
+                anmStop = true;
+            }
+            else
+            {
+                anmStop = false;
+                lr = -1;
+                moveNum = 0;
+            }
+            return;
+        }
+
+        if (GameManager.instance.bossClear)
+        {
+            canMove = false;
         }
 
         if (canMove)
@@ -296,5 +324,10 @@ public class PlayerMoveScript : MonoBehaviour
         GameManager.instance.GameOver();
         Destroy(gameObject);
         Instantiate(ExplodeObj, transform.position, Quaternion.identity);
+    }
+
+    public void ReMove()
+    {
+        canMove = true;
     }
 }
