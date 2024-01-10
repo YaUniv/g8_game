@@ -28,6 +28,8 @@ public class GameManager : MonoBehaviour
 
     public MaskFadeScript maskFadeScript;
 
+    public static int tryNum;
+
 
     private void Awake()
     {
@@ -48,6 +50,8 @@ public class GameManager : MonoBehaviour
         maskFade = false;
 
         MusicManager.MusicPlay(0);
+
+        tryNum++;
     }
 
     // Update is called once per frame
@@ -77,6 +81,15 @@ public class GameManager : MonoBehaviour
                 Result();
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Restart();
+        }
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            SceneManager.LoadScene("TitleScene");
+        }
     }
 
     public void GameOver()
@@ -92,6 +105,15 @@ public class GameManager : MonoBehaviour
         goalTime = time;
         timer = false;
         MusicManager.MusicPlay(1);
+
+        ResultScript.score = ScoreManager.instance.score;
+        ResultScript.goalTime = goalTime;
+        ResultScript.tryNum = tryNum;
+        if (GameObject.Find("Items").transform.childCount == 0) ResultScript.allItem = true;
+        else ResultScript.allItem = false;
+        if (GameObject.Find("Enemys").transform.childCount == 0) ResultScript.allEnemy = true;
+        else ResultScript.allEnemy = false;
+
     }
 
     // コルーチン本体
@@ -99,6 +121,11 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(2);
 
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    void Restart()
+    {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
@@ -111,6 +138,6 @@ public class GameManager : MonoBehaviour
 
     void Result()
     {
-        SceneManager.LoadScene("TitleScene");
+        SceneManager.LoadScene("ResultScene");
     }
 }

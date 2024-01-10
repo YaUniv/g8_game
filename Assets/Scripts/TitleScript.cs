@@ -38,6 +38,7 @@ public class TitleScript : MonoBehaviour
 
             if (time >= fadeTime)
             {
+                GameManager.tryNum = 0;
                 SceneManager.LoadScene("GameScene");
             }
         }
